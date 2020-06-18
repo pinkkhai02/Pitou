@@ -1,111 +1,136 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-struct sp_st 
-{	char tensp[30]; 
+enum LuaChon{
+    TAO_GIO_HANG=1,
+    CHON_HANG=2,
+    XEM_CHI_TIET_GIO_HANG=3,
+    LOAI_BO_MOT_MAT_HANG=4,
+    GHI_TOAN_BO_GIO_HANG_VAO_TEP_TIN_NHI_PHAN=5,
+    THOAT=6
+}; 
+struct Sanpham{	
+    char tensp[30]; 
 	int gia;
  	int soluong;
 };
-struct 
-{ 	char tenkhachhang[30];
+
+struct{
+ 	char tenkhachhang[30];
  	char diachi[50];
  	int sosanpham;
- 	struct sp_st dssp[30]; 
-}giohang_st;
-void taogiohang()
-{	printf("Nhap Ten Khach Hang: ");
+ 	Sanpham dssp[30]; 
+}Giohang;
+
+
+void taogiohang(){
+	printf("Nhap ten khach hang: ");
 	fflush(stdin);
-	gets(giohang_st.tenkhachhang);
-	printf("Nhap Dia Chi: ");
+	gets(Giohang.tenkhachhang);
+	printf("Nhap dia chi khach hang: ");
 	fflush(stdin);
-	gets(giohang_st.diachi);
-	giohang_st.sosanpham=0;	
+	gets(Giohang.diachi);
+	Giohang.sosanpham=0;	
 }
-int chonhang()
-{	int GH;
+int chonhang(){
+	int GH;
 	int i=0;
-while(GH!=0)	
-{ 
-	printf("Ten San Pham: ");
+    while(GH!=0){ 
+	printf("Ten san pham: ");
 	fflush(stdin);
-	gets(giohang_st.dssp[i].tensp);
-	printf("Nhap Gia: ");
-	scanf("%d",&giohang_st.dssp[i].gia);
-	printf("Nhap So Luong: ");
-	scanf("%d",&giohang_st.dssp[i].soluong);
-	giohang_st.sosanpham++;
-	i++;
-	printf("\n Khach Hang co muon tiep tuc chon hang Khong: ");
-	printf("\n Nhap 1 neu Co va Nhap 0 neu Khong : ");
+	gets(Giohang.dssp[i].tensp);
+	printf("Nhap gia: ");
+	scanf("%d",&Giohang.dssp[i].gia);
+	printf("Nhap so luong: ");
+	scanf("%d",&Giohang.dssp[i].soluong);
+	Giohang.sosanpham++;i++;
+	printf("\n Khach Hang co muon tiep tuc chon hang khong?");
+	printf("\n Nhap 1 neu 'Co' va Nhap 0 neu 'Khong': ");
 	scanf("%d", &GH);
 }
 }
-void xemchitiet()
-{ 	int i,j;
-	struct sp_st Doi;
-	printf("\n %-10s    %-10s    %-10s    %-10s \n","STT","Ten San Pham","Gia","So Luong");
-	for( i=0;i<giohang_st.sosanpham-2;i++)
-	{
-			for(j=i+1;j<giohang_st.sosanpham-1;j++)
-		{
-				if(strcmp(giohang_st.dssp[i].tensp,giohang_st.dssp[j].tensp)>0)
-				{
-				Doi=giohang_st.dssp[i];
-				giohang_st.dssp[i]=giohang_st.dssp[j];
-				giohang_st.dssp[j]=Doi;
-}}}
-	for(i=0;i<giohang_st.sosanpham;i++)
-{
-	printf("%-10d    %-10s      %-10d     %-10d \n",i+1,giohang_st.dssp[i].tensp,giohang_st.dssp[i].gia,giohang_st.dssp[i].soluong);			
-}}
+void xuatBill(){
+ 	int i,j;
+	struct Sanpham Doi;
+    printf("Ten khach hang:",Giohang.tenkhachhang);
+    printf("Dia chi:",Giohang.diachi);
+	printf("\n %-10s %-30s %-10s %-10s\n","STT","Ten San Pham","Gia","So Luong");
+	for( i=0;i<Giohang.sosanpham-2;i++){
+			for(j=i+1;j<Giohang.sosanpham-1;j++){
+				if(strcmp(Giohang.dssp[i].tensp,Giohang.dssp[j].tensp)>0){
+				Doi=Giohang.dssp[i];
+				Giohang.dssp[i]=Giohang.dssp[j];
+				Giohang.dssp[j]=Doi;
+            }       
+        }          
+    }   
+	for(i=0;i<Giohang.sosanpham;i++){
+	printf("%-10d %-30s %-10d %-10d\n",i+1,Giohang.dssp[i].tensp,Giohang.dssp[i].gia,Giohang.dssp[i].soluong);			
+    }
+}
 void loaibomathang(){
 	int n,i;
-	do
-	{
+	do{
 	printf("\nNhap vi tri san pham can loai bo: ");
 	scanf("%d",&n);
-	if(n<1 || n>giohang_st.sosanpham) printf("\nVi tri san phan khong hop le. Xin nhap lai vi tri! ");
-	}while(n<1 || n>giohang_st.sosanpham);
-	for( i=n-1;i<giohang_st.sosanpham;i++)
-		giohang_st.dssp[i]=giohang_st.dssp[i+1];
-	giohang_st.sosanpham=giohang_st.sosanpham-1;
+	if(n<1 || n>Giohang.sosanpham) printf("\nVi tri san phan khong hop le. Xin nhap lai vi tri! ");
+	}while(n<1 || n>Giohang.sosanpham);
+	for( i=n-1;i<Giohang.sosanpham;i++)
+		Giohang.dssp[i]=Giohang.dssp[i+1];
+	    Giohang.sosanpham=Giohang.sosanpham-1;
 }
-void luu(){
+	void xuatFile(){
 	FILE *fp;
 	int i;
-	fp = fopen("E://Users//KHANHLY//Desktop//vart","rb+");
-	fprintf(fp,"%-10s   %-10s   %-10s   %-10s	\n","STT","Ten san pham","Gia","So luong");
-	for( i=0;i<giohang_st.sosanpham;i++)
-		fprintf(fp,"%-10d   %-10s   %-10d   %-10d	\n",i+1,giohang_st.dssp[i].tensp,giohang_st.dssp[i].gia,giohang_st.dssp[i].soluong);
+	fp = fopen("cart.dat","wb");
+	fprintf(fp,"%-10s %-30s %-10s %-10s	\n","STT","Ten san pham","Gia","So luong");
+	for( i=0;i<Giohang.sosanpham;i++)
+		{
+		fprintf(fp,"%-10d %-30s %-10d %-10d	\n",i+1,Giohang.dssp[i].tensp,Giohang.dssp[i].gia,Giohang.dssp[i].soluong);
+		}
 	fclose(fp);
 }
-void Menu()
-{  int a;
-do{
-        printf("\n\n********************************************************************\n");
-        printf("**       CHUONG TRINH BAN HANG CO BAN                          **\n");
-        printf("**        1. Tao gio hang                                         **\n");
-        printf("**        2.  Chon hang                                           **\n");
-        printf("**        3. Xem chi tiet gio hang                                **\n");
-        printf("**        4. Loai bo mot mat hang                                 **\n"); 
-		printf("**        5.Ghi toan bo noi dung vao tep nhi phan cart.dat        **\n");
-        printf("**        6. Thoat                                                **\n");
-      	printf("********************************************************************\n");
 
-	 	printf("          Lua chon 1->6:");
-scanf("%d",&a);
-switch(a){
-	case 1: {taogiohang(); break;}
-	case 2:	{chonhang(); break;}
-	case 3: {xemchitiet(); break;}
-	case 4: {loaibomathang(); break;}
-	case 5:	{luu(); break;}
+void Menu(){
+    int luaChon;
+    do{
+        printf("             CHUONG TRINH GIO HANG DON GIAN                \n");
+        printf("               1. Tao gio hang                               \n");
+        printf("               2. Chon hang                                    \n");
+        printf("               3. Xem chi tiet gio hang                        \n");
+        printf("               4. Loai bo mot mat hang                         \n"); 
+		printf("               5. Ghi toan bo noi dung vao tep nhi phan cart.dat \n");
+        printf("               6. Thoat                                           \n");
+      	printf("------------------------------------------------------------------\n");
+        printf(" Lua chon cua ban 1->6:");
+scanf("%d",&luaChon);
+switch(luaChon){
+	case TAO_GIO_HANG: {
+        taogiohang(); 
+        break;
+    }
+	case CHON_HANG:	{
+        chonhang(); 
+        break;
+    }
+	case XEM_CHI_TIET_GIO_HANG: {
+        xuatBill();
+        break;
+    }
+	case LOAI_BO_MOT_MAT_HANG: {
+        loaibomathang(); 
+        break;
+    }
+	case GHI_TOAN_BO_GIO_HANG_VAO_TEP_TIN_NHI_PHAN:	{
+        xuatFile(); 
+        break;
+    }
 	default: break;
 }
-}while(a!=6);
+}while(luaChon!=6);
 }
-int main()
-{ 	Menu();
+int main(){
+ 	Menu();
 
 return 0;
 }
